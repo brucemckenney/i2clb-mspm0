@@ -1,5 +1,8 @@
 ///
-//  i2cm_conf.h
+//      i2cm_conf.h
+//      Rev 0.1.0
+//      Copyright 2025 Bruce McKenney
+//      BSD 2-clause license
 //
 #ifndef I2CM_CONF_H_
 #define I2CM_CONF_H_    1
@@ -18,4 +21,9 @@
 #define I2CMSDA_PF    3                // Per SLASEX0B Table 6-1
 #define I2CMSCL_PF    3
 
-#endif // I2CM_CONF_H_ */
+#if I2CM_DMA
+#define I2CM_DMACHAN    0   // Channel 0 (I just picked one)
+#define I2CM_DMATRIG    6   // I2C1 Publisher 1 (DMA_TRIG1) per SLASEX0D Table 8-2
+#endif
+
+#endif // I2CM_CONF_H_

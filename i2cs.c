@@ -1,5 +1,11 @@
 ///
 //      i2cs.c
+//      A (very) simple I2C slave, employing a "register" model.
+//      The registers are just an array, which can be written or read.
+//      It may be useful as a skeleton for a usage which actually does something.
+//      Rev 0.1.0
+//      Copyright 2025 Bruce McKenney
+//      BSD 2-clause license
 //
 #include <ti/devices/msp/msp.h>
 #include "i2cs.h"
@@ -64,6 +70,7 @@ i2cs_init(void)
     I2CS->SLAVE.SOAR = (I2CS_ADDR << I2C_SOAR_OAR_OFS) | I2C_SOAR_OAREN_ENABLE; // Our address
 
 #if POISON_TXFIFO
+    //  Diagnostic to see if we're underrunning the Tx FIFO.
     while ( (I2CS->SLAVE.SFIFOSR & I2C_SFIFOSR_TXFIFOCNT_MASK) != 0)
         I2CS->SLAVE.STXDATA = 0xFF;
     i2cs_txflush();
@@ -79,6 +86,7 @@ i2cs_init(void)
 
 ///
 //  I2CS_ISR()
+//  This is where all the work gets done.
 //
 void
 I2CS_ISR(void)

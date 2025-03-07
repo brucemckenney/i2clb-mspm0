@@ -1,5 +1,8 @@
 ///
-//  i2cs_conf.h
+//      i2cs_conf.h
+//      Rev 0.1.0
+//      Copyright 2025 Bruce McKenney
+//      BSD 2-clause license
 //
 #ifndef I2CS_CONF_H_
 #define I2CS_CONF_H_    1
@@ -19,4 +22,4 @@
 #define I2CSSDA_PF    3                // Per SLASEX0D Table 6-1
 #define I2CSSCL_PF    3
 
-#endif // I2CS_CONF_H_ */
+#endif // I2CS_CONF_H_

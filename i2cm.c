@@ -1,5 +1,9 @@
 ///
 //      i2cm.c
+//      A simple I2C master to work with a "register" model slave device.
+//      Rev 0.1.0
+//      Copyright 2025 Bruce McKenney
+//      BSD 2-clause license
 //
 #include <ti/devices/msp/msp.h>
 #include "i2cm.h"
@@ -7,11 +11,6 @@
 #include "clk.h"
 
 #define SINGLE_OP   1       // Use the Read On Tx Empty option for reads
-#define I2CM_DMA    1
-#if I2CM_DMA
-#define I2CM_DMACHAN    0   // Channel 0 (I just picked one)
-#define I2CM_DMATRIG    6   // I2C1 Publisher 1 (DMA_TRIG1) per SLASEX0D Table 8-2
-#endif
 
 //  Some shorthand
 #define I2CM_TXDONE() (I2CM->CPU_INT.RIS & I2C_CPU_INT_RIS_MTXDONE_SET)
@@ -47,6 +46,7 @@ i2cm_waitbusy(void)
 
 ///
 //  i2cm_clearSDA()
+//  Do the 9-clock trick to clear SDA.
 //
 extern void _delay_cycles(uint32_t count); // in main() somewhere
 #define SCL_CLK_CYCLES  80u
@@ -110,6 +110,7 @@ i2cm_init(void)
 
 ///
 //  i2cm_wregs()
+//  Write some number of registers starting with "reg"
 //
 uint32_t
 i2cm_wregs(uint8_t addr, uint8_t reg, uint32_t cnt, uint8_t *valp)
@@ -162,6 +163,7 @@ i2cm_wregs(uint8_t addr, uint8_t reg, uint32_t cnt, uint8_t *valp)
 
 ///
 //  i2cm_rregs()
+//  Read some number of registers starting with "reg".
 //
 uint32_t
 i2cm_rregs(uint8_t addr, uint8_t reg, uint32_t cnt, uint8_t *valp)
@@ -236,6 +238,10 @@ i2cm_rregs(uint8_t addr, uint8_t reg, uint32_t cnt, uint8_t *valp)
     return(rcnt);
 }
 
+///
+//  i2cm_probe()
+//  Returns non-zero if device "addr" is on the bus.
+//
 uint32_t
 i2cm_probe(uint8_t addr)
 {
